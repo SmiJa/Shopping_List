@@ -1,6 +1,13 @@
+import os
 # make a list to hold onto our items
 shopping_list = []
+lists = []
 c_file_name = ""
+
+lists_path = 'lists'
+
+if not os.path.exists(lists_path):
+    os.makedirs(lists_path)
 
 # print out instructions on how to use the app
 print("Add items to your list.")
@@ -22,7 +29,9 @@ def show_list():
         print(str(count) + ". " + str(item))
         count += 1
 
-
+def show_lists():
+    for file in os.listdir(lists_path):
+        print(file)
 
 def add_item():
     global c_file_name
@@ -34,22 +43,18 @@ def add_item():
     
 
 def save_list():
-    # file_save = open(c_file_name + ".txt", 'w')
     global c_file_name
     if c_file_name == "":
-        file_save = open("untitled.txt", 'w')
+        file_save = open(lists_path + "/untitled.txt", 'w')
         for item in shopping_list:
             file_save.write(item + "\n")
         
         print("Your list has been saved as untitled")
     else:
-        file_save = open(c_file_name + ".txt", 'w')
+        file_save = open(lists_path + "/" + c_file_name + ".txt", 'w')
         for item in shopping_list:
             file_save.write(item + "\n")
         print("Your list has been saved as {}".format(c_file_name))
-
-    # for item in shopping_list:
-    #     file_save.write(item + "\n")
 
     file_save.close()
 
@@ -59,7 +64,7 @@ def save_list_as():
     print("")
     new_file_name = input("> ")
     c_file_name = new_file_name
-    file_save_as = open(c_file_name + ".txt", 'w')
+    file_save_as = open(lists_path + "/" + c_file_name + ".txt", 'w')
 
     for item in shopping_list:
         file_save_as.write(item + "\n")
@@ -73,7 +78,7 @@ def load_file():
     del shopping_list[:]
     print("Which file would you like to load?")
     file_to_load = input("> ")
-    file_read = open(file_to_load + ".txt", "r")
+    file_read = open(lists_path + "/" + file_to_load + ".txt", "r")
     c_file_name = file_to_load
 
     for line in file_read:
@@ -104,6 +109,9 @@ while True:
         continue
     elif new_item.upper() == 'SAVE AS':
         save_list_as()
+        continue
+    elif new_item.upper() == 'LISTS':
+        show_lists()
         continue
     else:
         # add new items to our list
